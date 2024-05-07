@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
 
-const User = require('../models/userModel');
-
 exports.getUser = async (req, res) => {
   try {
     const username = req.params.username;

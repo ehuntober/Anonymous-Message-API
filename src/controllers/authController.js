@@ -58,11 +58,13 @@ exports.login = async(req,res) =>{
 
   // Generate a JWT token
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '1h',
+    expiresIn: '1d',
   });
 
+   res.cookies(token)
   res.status(200).json({ token });
 } catch (err) {
+    console.log(err)
   res.status(500).json({ message: 'Internal server error' });
 }
 };

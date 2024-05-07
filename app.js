@@ -1,9 +1,9 @@
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
-const authRoutes = require('./routes/authRoutes');
-const messageRoutes = require('./routes/messageRoutes');
-const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./src/routes/authRoutes');
+const messageRoutes = require('./src/routes/messageRoutes');
+const userRoutes = require('./src/routes/userRoutes');
 
 const app = express();
 const server = http.createServer(app);
