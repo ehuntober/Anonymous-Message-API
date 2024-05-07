@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcryptjs')
 const jwt =  require('jsonwebtoken')
+const RefreshToken = require('../models/refreshTokenModel');
 
 
 exports.register = async (req,res) =>{
@@ -69,3 +70,47 @@ exports.login = async(req,res) =>{
 };
 
 
+
+
+exports.refreshToken = async (req, res) => {
+    const { refreshToken } = req.body;
+  
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token is required' });
+    }
+  
+    try {
+      const decodedToken = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+      const userId = decodedToken.userId;
+  
+      const storedToken = await RefreshToken.findOne({ token: refreshToken, userId });
+  
+      if (!storedToken) {
+        return res.status(401).json({ message: 'Invalid refresh token' });
+      }
+  
+      if (storedToken.expiryDate < new Date()) {
+        await RefreshToken.deleteOne({ _id: storedToken._id });
+        return res.status(401).json({ message: 'Refresh token has expired' });
+      }
+  
+      const newAccessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      });
+      const newRefreshToken = jwt.sign({ userId }, process.env.JWT_REFRESH_SECRET, {
+        expiresIn: '7d',
+      });
+  
+      await RefreshToken.deleteOne({ _id: storedToken._id });
+      const newStoredRefreshToken = new RefreshToken({
+        token: newRefreshToken,
+        userId,
+        expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      });
+      await newStoredRefreshToken.save();
+  
+      res.status(200).json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+    } catch (err) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
