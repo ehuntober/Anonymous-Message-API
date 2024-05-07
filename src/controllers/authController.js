@@ -61,7 +61,12 @@ exports.login = async(req,res) =>{
     expiresIn: '1d',
   });
 
-   res.cookies(token)
+   res.cookie('jwt', token, {
+    expires: new Date (Date.now() + 3600000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Strict'
+   })
   res.status(200).json({ token });
 } catch (err) {
     console.log(err)
