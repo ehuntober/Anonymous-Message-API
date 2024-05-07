@@ -11,14 +11,12 @@ exports.register = async (req,res) =>{
 
         // check if the username already 
 
-        const existingUser = await User.findOne({username});
-        if (existingUser){
-            return res.status(400).json({
-                message: "Username already exists"
-            })
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+          return res.status(400).json({ message: 'Username or email already exists' });
         }
 
-        const url = `process.env.HOSTED_URL/${username}`;
+        const url = `${process.env.HOSTED_URL}/${username}`;
 
         // create a new user
         const newUser = new User({username, email, password, url});
