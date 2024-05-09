@@ -5,9 +5,9 @@ const upload = require('../middlewares/upload');
 
 exports.sendMessage = async (req, res) => {
     try {
-      const {recip}
+      const username  =  req.params
       const { content, recipient } = req.body;
-      const recipientUrl = recipient;
+      const recipientUrl = username;
   
       // Moderate the message content
       const moderatedContent = await moderateContent(content);
