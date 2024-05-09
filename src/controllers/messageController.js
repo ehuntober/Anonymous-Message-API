@@ -5,6 +5,7 @@ const upload = require('../middlewares/upload');
 
 exports.sendMessage = async (req, res) => {
     try {
+      const {recip}
       const { content, recipient } = req.body;
       const recipientUrl = recipient;
   
