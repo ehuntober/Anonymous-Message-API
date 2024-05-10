@@ -3,9 +3,6 @@ const User = require('../models/userModel');
 const moderateContent = require('../utils/moderation');
 const upload = require('../middlewares/upload');
 
-
-
-
 exports.sendMessage = async (req, res) => {
   try {
     const username = req.params.username;
