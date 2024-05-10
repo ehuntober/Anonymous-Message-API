@@ -39,6 +39,8 @@ exports.sendMessage = async (req, res) => {
 exports.getMessages = async (req, res) => {
   try {
     const username = req.params.username;
+    console.log('error fixed')
+
 
     // Find the user by username
     const user = await User.findOne({ username });
