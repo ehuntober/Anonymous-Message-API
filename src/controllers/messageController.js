@@ -36,22 +36,33 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
+
 exports.getMessages = async (req, res) => {
   try {
-    const username = req.params.username;
-
-
-    // Find the user by username
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Find all messages for the user
-    const messages = await Message.find({ recipient: user._id }).sort({ createdAt: -1 });
-
-    res.status(200).json(messages);
+    const messages = await Message.find({ recipientId: req.userId });
+    res.json(messages);
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
   }
 };
+
+// exports.getMessages = async (req, res) => {
+//   try {
+//     const username = req.params.username;
+
+
+//     // Find the user by username
+//     const user = await User.findOne({ username });
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     // Find all messages for the user
+//     const messages = await Message.find({ recipient: user._id }).sort({ createdAt: -1 });
+
+//     res.status(200).json(messages);
+//   } catch (err) {
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
