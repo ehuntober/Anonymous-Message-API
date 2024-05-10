@@ -11,7 +11,7 @@ exports.sendMessage = async (req, res) => {
     // Moderate the message content
     const moderatedContent = await moderateContent(content);
     if (!moderatedContent.isAllowed) {
-      return res.status(400).json({ message: 'Message content not allowed' });
+      return res.status(400).json({ message: 'Message content not allowed use less offensive words' });
     }
     // Find the recipient user
     const recipientUser = await User.findOne({ username: recipientUsername });
