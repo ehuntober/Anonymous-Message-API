@@ -13,14 +13,18 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  // Only allow image files
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
   if (allowedTypes.includes(file.mimetype)) {
+    // Attachment is an image, accept it
     cb(null, true);
   } else {
-    cb(new Error('File type not allowed'), false);
+    // Attachment is not an image, reject it
+    cb(new Error('Only image files are allowed'), false);
   }
 };
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({ storage, fileFilter, limits: { fileSize: 5 * 1024 * 1024 } }); // 5MB file size limit
 
 module.exports = upload;
