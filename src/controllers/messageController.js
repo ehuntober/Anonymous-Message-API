@@ -30,6 +30,7 @@ exports.sendMessage = async (req, res) => {
     // Handle attachments if provided
     if (req.file) {
       newMessage.attachments.push(req.file.path);
+      console.log('new file added')
     }
 
     await newMessage.save();
